@@ -1,27 +1,28 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import axios from 'axios';
 import PageInfo from "./PageInfo";
+import classes from './Product.module.css';
 
 const Product = () => {
-    const [products, setProducts, page_no, set_page_no] = useState([])
+    const [products, setProducts] = useState([])
+    const [details, setDetails] = useState([])
 
     useEffect(() => {
         axios.get('/products')
             .then(resp => {
                 setProducts(resp.data.data)
-                set_page_no(resp.data.page)
-
+                setDetails(resp.data)
             })
             .catch(resp => console.log(resp))
     }, [products.length])
 
     const list = products.map(item => {
-        return <li key={item.name}>{item.name}</li>
+        return <div className={classes.circleBase} style={{background: item.color}} key={item.name}>{item.name}</div>
     })
-    const page_number = page_no;
+
     return (
         <Fragment>
-            <PageInfo page_no={page_number} per_page={2} total={3} total_pages={4}/>
+            <PageInfo page_no={details.page} per_page={details.per_page} total={details.total} total_pages={details.total_pages}/>
             <div>This is my products</div>
             <ul>{list}</ul>
         </Fragment>
