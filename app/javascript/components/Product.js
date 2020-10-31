@@ -12,6 +12,11 @@ const Product = () => {
             .then(resp => {
                 setProducts(resp.data.data)
                 setDetails(resp.data)
+                // For local storage for 100 minute
+                var dateAv = new Date();
+                var endTime = new Date(dateAv.getFullYear(), dateAv.getMonth(), dateAv.getDate(), dateAv.getHours(), dateAv.getMinutes() + 100);
+                var object = {'products': products, timestamp: endTime.getTime()}
+                localStorage.setItem( 'key', JSON.stringify(object));
             })
             .catch(resp => console.log(resp))
     }, [products.length])
